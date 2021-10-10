@@ -138,7 +138,7 @@ baby_names =
 The following code generates a table showing the ranking of the name `Olivia` among each ethnicity for the years 2011 through 2016.
 
 ```{r}
-baby_olivia <-
+baby_olivia =
   filter(baby_names, childs_first_name == "olivia") %>%
   select(-c("gender", "childs_first_name", "count")) %>% 
   pivot_wider(
@@ -146,38 +146,34 @@ baby_olivia <-
     values_from = "rank") %>% 
   knitr::kable()
 
-baby_data_olivia
+baby_olivia
 ```
 
 The following code generates a table showing the most popular `male` names among each ethnicity for the years 2011 through 2016.
 
 ```{r generate_table_male_names}
-baby_data_males <-
-  filter(baby_data,
-    rank == 1,
+baby_males =
+  filter(
+    baby_names, 
+    rank == 1, 
     gender == "male") %>%
   select(-c("gender", "count", "rank")) %>% 
   pivot_wider(
     names_from = "year_of_birth",
     values_from = "childs_first_name") %>% 
-  knitr::kable(align = 'c')
+  knitr::kable()
 
-baby_data_males
+baby_males
 ```
 
-The following code generates a scatterplot showing the number of children with a name against the rank in popularity of that name, after filtering for `white non hispanic`, `male`, and `2016` as the `year_of_birth`. 
+Scatterplot showing the number of children with a name against the rank of that name, among `white non hispanic` `male`s born in `2016`.
 
-```{r scatterplot_of_names, fig.align= 'center'}
-baby_plot <-
-    filter(baby_data,
-           ethnicity == "white non hispanic",
-           gender == "male",
-           year_of_birth == 2016)
-bdp <- ggplot(baby_data_plot, aes(x = rank, y = count)) + geom_point(colour = "red", size = 2, alpha = 1/5)
-bdp + labs(
-    title = "The Total Count of Particular Names* by Their Popularity Rank",
-    subtitle = "Amongst White Non-Hispanic Males Born in 2016",
-    x = "Popularity Ranking",
-    y = "Number of Male Babies Named a Particular Name",
-    caption = "*names not shown")
+```{r}
+baby_plot =
+  filter(
+    baby_names,
+    ethnicity == "white non hispanic",
+    gender == "male",
+    year_of_birth == 2016) %>% 
+  ggplot(aes(x = rank, y = count)) + geom_point()
 ```
